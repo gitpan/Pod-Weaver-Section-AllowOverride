@@ -23,10 +23,12 @@ my %WriteMakefileArgs = (
   "NAME" => "Pod::Weaver::Section::AllowOverride",
   "PREREQ_PM" => {
     "Moose" => 0,
+    "Moose::Util::TypeConstraints" => 0,
     "Pod::Weaver::Role::Section" => 0,
-    "Pod::Weaver::Role::Transformer" => 0
+    "Pod::Weaver::Role::Transformer" => 0,
+    "namespace::autoclean" => 0
   },
-  "VERSION" => "0.01",
+  "VERSION" => "0.02",
   "test" => {
     "TESTS" => "t/*.t"
   }

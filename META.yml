@@ -15,12 +15,14 @@ meta-spec:
 name: Pod-Weaver-Section-AllowOverride
 requires:
   Moose: 0
+  Moose::Util::TypeConstraints: 0
   Pod::Weaver::Role::Section: 0
   Pod::Weaver::Role::Transformer: 0
+  namespace::autoclean: 0
   perl: 5.010
 resources:
   repository: git://github.com/madsen/pod-weaver-section-allowoverride.git
-version: 0.01
+version: 0.02
 x_Dist_Zilla:
   plugins:
     -

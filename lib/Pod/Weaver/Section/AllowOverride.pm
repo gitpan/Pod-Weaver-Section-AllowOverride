@@ -21,8 +21,11 @@ use 5.010;
 use Moose;
 with qw(Pod::Weaver::Role::Transformer Pod::Weaver::Role::Section);
 
-our $VERSION = '0.01';
-# This file is part of Pod-Weaver-Section-AllowOverride 0.01 (June 1, 2012)
+our $VERSION = '0.02';
+# This file is part of Pod-Weaver-Section-AllowOverride 0.02 (June 6, 2012)
+
+use namespace::autoclean;
+use Moose::Util::TypeConstraints;
 
 #=====================================================================
 
@@ -32,6 +35,13 @@ has header_re => (
   isa     => 'Str',
   lazy    => 1,
   default => sub {'^' . quotemeta(shift->plugin_name) . '$' },
+);
+
+
+has action => (
+  is  => 'ro',
+  isa => enum([ qw(replace prepend append) ]),
+  default => 'replace',
 );
 
 has _override_with => (
@@ -89,21 +99,31 @@ sub weave_section
   return unless $override;
 
   my $children = $document->children;
+  my $prev;
 
   if (@$children and $self->_section_matcher->( $children->[-1] )) {
-    pop @$children;
+    $prev = pop @$children;
   } else {
     $self->log(["No previous %s section to override", $override->content]);
   }
 
   push @$children, $override;
+
+  given ($self->action) {
+    when ('replace') { }        # nothing more to do
+    break unless $prev;
+
+    my $prev_content = $prev->children;
+
+    when ('prepend') { push    @{ $override->children }, @$prev_content }
+    when ('append')  { unshift @{ $override->children }, @$prev_content }
+  } # end given $self->action
 } # end weave_section
 
 #=====================================================================
 # Package Return Value:
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;
 
 
@@ -116,8 +136,8 @@ Pod::Weaver::Section::AllowOverride - Allow POD to override a Pod::Weaver-provid
 
 =head1 VERSION
 
-This document describes version 0.01 of
-Pod::Weaver::Section::AllowOverride, released June 1, 2012.
+This document describes version 0.02 of
+Pod::Weaver::Section::AllowOverride, released June 6, 2012.
 
 =head1 SYNOPSIS
 
@@ -149,6 +169,32 @@ This regular expression is used to select the section you want to
 override.  It's matched against the section name from the C<=head1>
 line.  The default is an exact match with the name of this plugin.
 (e.g. if the plugin name is AUTHOR, the default would be C<^AUTHOR$>)
+
+=head2 action
+
+This controls what to do when both a Pod::Weaver-provided section and
+a POD-provided section are found.  It must be one of the following values:
+
+=over 4
+
+=item replace
+
+Replace the Pod::Weaver-provided section with the POD-provided one.
+(This is the default.)
+
+=item prepend
+
+Place the POD-provided section at the beginning of the
+Pod::Weaver-provided one.  The POD-provided header is used, and the
+Pod::Weaver-provided header is discarded.
+
+=item append
+
+Place the POD-provided section at the end of the
+Pod::Weaver-provided one.  The POD-provided header is used, and the
+Pod::Weaver-provided header is discarded.
+
+=back
 
 =head1 SEE ALSO
 
