@@ -1,4 +1,4 @@
-Pod-Weaver-Section-AllowOverride version 0.02, released June 6, 2012
+Pod-Weaver-Section-AllowOverride version 0.03, released August 11, 2012
 
 
 This section plugin for Pod::Weaver will allow you to override a
@@ -22,9 +22,10 @@ DEPENDENCIES
 
   Package                         Minimum Version
   ------------------------------- ---------------
-  perl                             5.010
+  perl                             5.10.0
   Moose                            
   Moose::Util::TypeConstraints     
+  Pod::Elemental::MakeSelector     
   Pod::Weaver::Role::Section       
   Pod::Weaver::Role::Transformer   
   namespace::autoclean
@@ -32,10 +33,11 @@ DEPENDENCIES
 
 
 CHANGES
-    Here's what's new in version 0.02 of Pod-Weaver-Section-AllowOverride:
+    Here's what's new in version 0.03 of Pod-Weaver-Section-AllowOverride:
     (See the file "Changes" for the full revision history.)
 
-	- Add the action attribute
+	- Use Pod::Elemental::MakeSelector instead of building a
+	  selector by hand
 
 
 

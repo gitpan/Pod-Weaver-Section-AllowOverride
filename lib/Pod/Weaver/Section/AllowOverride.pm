@@ -21,11 +21,12 @@ use 5.010;
 use Moose;
 with qw(Pod::Weaver::Role::Transformer Pod::Weaver::Role::Section);
 
-our $VERSION = '0.02';
-# This file is part of Pod-Weaver-Section-AllowOverride 0.02 (June 6, 2012)
+our $VERSION = '0.03';
+# This file is part of Pod-Weaver-Section-AllowOverride 0.03 (August 11, 2012)
 
 use namespace::autoclean;
 use Moose::Util::TypeConstraints;
+use Pod::Elemental::MakeSelector qw(make_selector);
 
 #=====================================================================
 
@@ -52,21 +53,22 @@ has _override_with => (
 #---------------------------------------------------------------------
 # Return a sub that matches a node against header_re:
 
-sub _section_matcher
+has _section_matcher => (
+  is   => 'ro',
+  isa  => 'CodeRef',
+  lazy => 1,
+  builder  => '_build_section_matcher',
+  init_arg => undef,
+);
+
+sub _build_section_matcher
 {
   my $self = shift;
 
   my $header_re = $self->header_re;
-  $header_re    = qr/$header_re/;
 
-  return sub {
-    my $node = shift;
-
-    return ($node->can('command') and
-            $node->command eq 'head1' and
-            $node->content =~ $header_re);
-  } # end sub
-} # end _section_matcher
+  return make_selector(qw(-command head1  -content) => qr/$header_re/);
+} # end _build_section_matcher
 
 #---------------------------------------------------------------------
 # Look for a matching section in the original POD, and remove it temporarily:
@@ -136,8 +138,8 @@ Pod::Weaver::Section::AllowOverride - Allow POD to override a Pod::Weaver-provid
 
 =head1 VERSION
 
-This document describes version 0.02 of
-Pod::Weaver::Section::AllowOverride, released June 6, 2012.
+This document describes version 0.03 of
+Pod::Weaver::Section::AllowOverride, released August 11, 2012.
 
 =head1 SYNOPSIS
 

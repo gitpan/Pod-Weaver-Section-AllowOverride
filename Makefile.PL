@@ -24,11 +24,12 @@ my %WriteMakefileArgs = (
   "PREREQ_PM" => {
     "Moose" => 0,
     "Moose::Util::TypeConstraints" => 0,
+    "Pod::Elemental::MakeSelector" => 0,
     "Pod::Weaver::Role::Section" => 0,
     "Pod::Weaver::Role::Transformer" => 0,
     "namespace::autoclean" => 0
   },
-  "VERSION" => "0.02",
+  "VERSION" => "0.03",
   "test" => {
     "TESTS" => "t/*.t"
   }
