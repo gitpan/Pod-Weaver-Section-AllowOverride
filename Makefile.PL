@@ -12,7 +12,12 @@ my %WriteMakefileArgs = (
   "ABSTRACT" => "Allow POD to override a Pod::Weaver-provided section",
   "AUTHOR" => "Christopher J. Madsen <perl\@cjmweb.net>",
   "BUILD_REQUIRES" => {
-    "Test::More" => 0
+    "File::Spec::Functions" => 0,
+    "File::Temp" => "0.19",
+    "PPI" => 0,
+    "Pod::Elemental::Document" => 0,
+    "Pod::Weaver" => 0,
+    "Test::More" => "0.88"
   },
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30"
@@ -29,7 +34,7 @@ my %WriteMakefileArgs = (
     "Pod::Weaver::Role::Transformer" => 0,
     "namespace::autoclean" => 0
   },
-  "VERSION" => "0.03",
+  "VERSION" => "0.04",
   "test" => {
     "TESTS" => "t/*.t"
   }

@@ -3,11 +3,16 @@ abstract: 'Allow POD to override a Pod::Weaver-provided section'
 author:
   - 'Christopher J. Madsen <perl@cjmweb.net>'
 build_requires:
-  Test::More: 0
+  File::Spec::Functions: 0
+  File::Temp: 0.19
+  PPI: 0
+  Pod::Elemental::Document: 0
+  Pod::Weaver: 0
+  Test::More: 0.88
 configure_requires:
   ExtUtils::MakeMaker: 6.30
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.300021, CPAN::Meta::Converter version 2.120921'
+generated_by: 'Dist::Zilla version 4.300028, CPAN::Meta::Converter version 2.120921'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -23,8 +28,10 @@ requires:
   perl: 5.010
 resources:
   repository: git://github.com/madsen/pod-weaver-section-allowoverride.git
-version: 0.03
+version: 0.04
 x_Dist_Zilla:
+  perl:
+    version: 5.014002
   plugins:
     -
       class: Dist::Zilla::Plugin::VersionFromModule
@@ -33,27 +40,27 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::GatherDir
       name: CJM/GatherDir
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::PruneCruft
       name: CJM/PruneCruft
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::ManifestSkip
       name: CJM/ManifestSkip
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::MetaJSON
       name: CJM/MetaJSON
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::MetaYAML
       name: CJM/MetaYAML
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::License
       name: CJM/License
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::Test::PrereqsFromMeta
       name: CJM/Test::PrereqsFromMeta
@@ -61,23 +68,23 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::PodSyntaxTests
       name: CJM/PodSyntaxTests
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::PodCoverageTests
       name: CJM/PodCoverageTests
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::ExtraTests
       name: CJM/ExtraTests
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::MakeMaker
       name: CJM/MakeMaker
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::MetaConfig
       name: CJM/MetaConfig
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::MatchManifest
       name: CJM/MatchManifest
@@ -105,27 +112,27 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::Git::Check
       name: CJM/@Git/Check
-      version: 1.121010
+      version: 2.005
     -
       class: Dist::Zilla::Plugin::Git::Commit
       name: CJM/@Git/Commit
-      version: 1.121010
+      version: 2.005
     -
       class: Dist::Zilla::Plugin::Git::Tag
       name: CJM/@Git/Tag
-      version: 1.121010
+      version: 2.005
     -
       class: Dist::Zilla::Plugin::Git::Push
       name: CJM/@Git/Push
-      version: 1.121010
+      version: 2.005
     -
       class: Dist::Zilla::Plugin::TestRelease
       name: CJM/TestRelease
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::UploadToCPAN
       name: CJM/UploadToCPAN
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::ArchiveRelease
       name: CJM/ArchiveRelease
@@ -137,33 +144,33 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::AutoPrereqs
       name: AutoPrereqs
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':InstallModules'
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':IncModules'
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':TestFiles'
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':ExecFiles'
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':ShareFiles'
-      version: 4.300021
+      version: 4.300028
     -
       class: Dist::Zilla::Plugin::FinderCode
       name: ':MainModule'
-      version: 4.300021
+      version: 4.300028
   zilla:
     class: Dist::Zilla::Dist::Builder
     config:
       is_trial: 0
-    version: 4.300021
+    version: 4.300028

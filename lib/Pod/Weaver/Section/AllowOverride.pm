@@ -21,8 +21,8 @@ use 5.010;
 use Moose;
 with qw(Pod::Weaver::Role::Transformer Pod::Weaver::Role::Section);
 
-our $VERSION = '0.03';
-# This file is part of Pod-Weaver-Section-AllowOverride 0.03 (August 11, 2012)
+our $VERSION = '0.04';
+# This file is part of Pod-Weaver-Section-AllowOverride 0.04 (January 5, 2013)
 
 use namespace::autoclean;
 use Moose::Util::TypeConstraints;
@@ -43,6 +43,13 @@ has action => (
   is  => 'ro',
   isa => enum([ qw(replace prepend append) ]),
   default => 'replace',
+);
+
+
+has match_anywhere => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
 );
 
 has _override_with => (
@@ -100,16 +107,28 @@ sub weave_section
   my $override = $self->_override_with;
   return unless $override;
 
+  my $section_matcher = $self->_section_matcher;
   my $children = $document->children;
   my $prev;
 
-  if (@$children and $self->_section_matcher->( $children->[-1] )) {
-    $prev = pop @$children;
+  if ($self->match_anywhere) {
+    my $pos = @$children;
+    while (1) {
+      $self->log_fatal(["No section matching /%s/", $self->header_re])
+          unless $pos--;
+      last if $section_matcher->( $children->[$pos] );
+    }
+    $prev = splice @$children, $pos, 1, $override;
   } else {
-    $self->log(["No previous %s section to override", $override->content]);
-  }
+    if (@$children and $section_matcher->( $children->[-1] )) {
+      $prev = pop @$children;
+    } else {
+      $self->log(["The previous section did not match /%s/, won't override it",
+                  $self->header_re]);
+    }
 
-  push @$children, $override;
+    push @$children, $override;
+  } # end else must override immediately preceding section
 
   given ($self->action) {
     when ('replace') { }        # nothing more to do
@@ -128,8 +147,8 @@ sub weave_section
 __PACKAGE__->meta->make_immutable;
 1;
 
-
 __END__
+
 =pod
 
 =head1 NAME
@@ -138,14 +157,16 @@ Pod::Weaver::Section::AllowOverride - Allow POD to override a Pod::Weaver-provid
 
 =head1 VERSION
 
-This document describes version 0.03 of
-Pod::Weaver::Section::AllowOverride, released August 11, 2012.
+This document describes version 0.04 of
+Pod::Weaver::Section::AllowOverride, released January 5, 2013.
 
 =head1 SYNOPSIS
 
   [Authors]
   [AllowOverride]
   header_re = ^AUTHORS?$
+  action    = replace ; this is the default
+  match_anywhere = 0  ; this is the default
 
 =head1 DESCRIPTION
 
@@ -157,7 +178,8 @@ Pod::Weaver-provided one will be used.
 
 Both the original section in your POD and the section provided by
 Pod::Weaver must match the C<header_re>.  Also, this plugin must
-immediately follow the section you want to replace.
+immediately follow the section you want to replace (unless you set
+C<match_anywhere> to a true value).
 
 It's a similar idea to L<Pod::Weaver::Role::SectionReplacer>, except
 that it works the other way around.  SectionReplacer replaces the
@@ -198,6 +220,17 @@ Pod::Weaver-provided header is discarded.
 
 =back
 
+=head2 match_anywhere
+
+By default, AllowOverride must immediately follow the section to be
+overriden in your F<weaver.ini>.  If you set C<match_anywhere> to a
+true value, then it can come anywhere after the section to be
+overriden (i.e. there can be other sections in between).
+AllowOverride will search backwards for a section matching
+C<header_re>, and die if there is no such section.
+
+This is useful if the section you want to override comes from a bundle.
+
 =head1 SEE ALSO
 
 L<Pod::Weaver::Role::SectionReplacer>,
@@ -222,10 +255,9 @@ and may be cloned from L<git://github.com/madsen/pod-weaver-section-allowoverrid
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Christopher J. Madsen.
+This software is copyright (c) 2013 by Christopher J. Madsen.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
