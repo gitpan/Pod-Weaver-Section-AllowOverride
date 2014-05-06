@@ -21,8 +21,8 @@ use 5.010;
 use Moose;
 with qw(Pod::Weaver::Role::Transformer Pod::Weaver::Role::Section);
 
-our $VERSION = '0.04';
-# This file is part of Pod-Weaver-Section-AllowOverride 0.04 (January 5, 2013)
+our $VERSION = '0.05';
+# This file is part of Pod-Weaver-Section-AllowOverride 0.05 (May 5, 2014)
 
 use namespace::autoclean;
 use Moose::Util::TypeConstraints;
@@ -130,15 +130,17 @@ sub weave_section
     push @$children, $override;
   } # end else must override immediately preceding section
 
-  given ($self->action) {
-    when ('replace') { }        # nothing more to do
-    break unless $prev;
+  for my $action ($self->action) {
+    last if $action eq 'replace' or not $prev; # nothing more to do
 
     my $prev_content = $prev->children;
 
-    when ('prepend') { push    @{ $override->children }, @$prev_content }
-    when ('append')  { unshift @{ $override->children }, @$prev_content }
-  } # end given $self->action
+    if (     $action eq 'prepend') {
+      push    @{ $override->children }, @$prev_content
+    } elsif ($action eq 'append')  {
+      unshift @{ $override->children }, @$prev_content
+    }
+  } # end for $self->action
 } # end weave_section
 
 #=====================================================================
@@ -157,8 +159,8 @@ Pod::Weaver::Section::AllowOverride - Allow POD to override a Pod::Weaver-provid
 
 =head1 VERSION
 
-This document describes version 0.04 of
-Pod::Weaver::Section::AllowOverride, released January 5, 2013.
+This document describes version 0.05 of
+Pod::Weaver::Section::AllowOverride, released May 5, 2014.
 
 =head1 SYNOPSIS
 
@@ -255,7 +257,7 @@ and may be cloned from L<git://github.com/madsen/pod-weaver-section-allowoverrid
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Christopher J. Madsen.
+This software is copyright (c) 2014 by Christopher J. Madsen.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

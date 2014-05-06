@@ -1,4 +1,4 @@
-Pod-Weaver-Section-AllowOverride version 0.04, released January 5, 2013
+Pod-Weaver-Section-AllowOverride version 0.05, released May 5, 2014
 
 
 This section plugin for Pod::Weaver will allow you to override a
@@ -33,17 +33,16 @@ DEPENDENCIES
 
 
 CHANGES
-    Here's what's new in version 0.04 of Pod-Weaver-Section-AllowOverride:
+    Here's what's new in version 0.05 of Pod-Weaver-Section-AllowOverride:
     (See the file "Changes" for the full revision history.)
 
-	- Add the match_anywhere attribute
-	- Add tests
+	- Don't use given/when, as Perl 5.18 marked it experimental
 
 
 
 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Christopher J. Madsen.
+This software is copyright (c) 2014 by Christopher J. Madsen.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
